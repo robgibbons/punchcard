@@ -13,6 +13,7 @@ A simple browser-based UI and Python program for generating IBM punch cards usin
    - Click any cell, then hold **Shift** and click another cell to draw a straight line between the two points (works diagonally, vertically, or horizontally) using Bresenham's line algortihm.
      - If the first clicked cell is checked, the entire line will be checked.
      - If it's unchecked, the entire line will be unchecked.
+
 **Save Your Work**
    - Click the **"Save"** link below the grid to download a CSV file containing your punched cell data. It will be named punchcard.csv by default.
 
