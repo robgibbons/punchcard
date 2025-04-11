@@ -29,4 +29,5 @@ A simple browser-based UI and Python program for generating IBM punch cards usin
 
 
 **Laser Cutter**
-   The script `punchcard.py` has a number of configurable parameters, which will need to be calibrated to suit the laser cutter and IBM punchcards. The number of columns and rows, cell widths, cell spacing, grid offsets, and laser kerf (width of the laser cut itself) are all configurable, and will need to be adjusted.
+
+The script `punchcard.py` has a number of configurable parameters, which will need to be calibrated to suit the laser cutter and IBM punchcards. The number of columns and rows, cell widths, cell spacing, grid offsets, and laser kerf (width of the laser cut itself) are all configurable, and will need to be adjusted.
