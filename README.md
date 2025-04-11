@@ -2,6 +2,9 @@
 
 A simple browser-based UI and Python program for generating IBM punch cards using a grid of checkboxes. This tool allows you to visually design punch cards, export them as CSV, then convert them to SVG/PDF using the companion Python script. The SVGs may then be fed into a laser cutter to cut actual IBM punch cards.
 
+![image](https://github.com/user-attachments/assets/9c5fb486-b7bd-498f-8ff1-88803c3a580f)
+
+
 ## 🖱 Basic Usage
 
 **Edit the Punch Card**
