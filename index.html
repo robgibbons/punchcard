@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IBM Punch Card Editor</title>
+  <style>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(80, 10px);
+      gap: 12px 4px;
+    }
+
+    .cell {
+      margin: 0;
+      padding: 0;
+      width: 10px;
+      height: 20px;
+      position: relative;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .cell input[type="checkbox"] {
+      display: none;
+    }
+
+    .cell:has(input:checked) {
+      background-color: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>IBM Punch Card Editor</h1>
+  <div class="grid" id="grid-container"></div>
+  <a href id="save">Save</a>
+
+  <script>
+    let saveLink;
+    let selectedCell = null;
+    let isShiftPressed = false;
+    let isMouseDown = false;
+
+    const gridContainer = document.getElementById('grid-container');
+    const numRows = 12;
+    const numCols = 80;
+    let cellNum = 0;
+
+    // Collects the indices of all checked checkboxes
+    function getCheckedCellIndices() {
+      const indices = [];
+      const checkedCells = document.querySelectorAll('.grid input:checked');
+      for (const cell of checkedCells) {
+        indices.push(parseInt(cell.name));
+      }
+      return indices;
+    }
+
+    // Updates the download link with a CSV of checked cell indices
+    function updateSaveLink() {
+      const csv = getCheckedCellIndices().toString();
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      saveLink.setAttribute("href", url);
+      saveLink.setAttribute("download", "punchcard.csv");
+    }
+
+    // Toggles a cell or draws a line of cells based on Shift key state
+    function toggleCell(event) {
+      const cell = event.target.closest('.cell');
+      const check = cell.querySelector('input');
+
+      // If SHIFT is pressed and a cell was previously selected
+      if (isShiftPressed && selectedCell) {
+        const startIndex = parseInt(selectedCell.name);
+        const endIndex = parseInt(check.name);
+
+        const startRow = Math.floor(startIndex / numCols);
+        const startCol = startIndex % numCols;
+        const endRow = Math.floor(endIndex / numCols);
+        const endCol = endIndex % numCols;
+
+        // Determine whether to check or uncheck based on selected cell's state
+        const shouldCheck = selectedCell.checked;
+
+        // Use Bresenham's Line Drawing Algorithm to fill the line
+        checkLineBetweenCells(startRow, startCol, endRow, endCol, shouldCheck);
+      } else {
+        // Normal click toggles cell state
+        check.checked = !check.checked;
+      }
+
+      selectedCell = check;
+      updateSaveLink();
+    }
+
+    // Uses Bresenham's Line Drawing Algorithm to check/uncheck cells between two points
+    function checkLineBetweenCells(startRow, startCol, endRow, endCol, shouldCheck) {
+      let dx = Math.abs(endCol - startCol);
+      let dy = Math.abs(endRow - startRow);
+      let sx = startCol < endCol ? 1 : -1;
+      let sy = startRow < endRow ? 1 : -1;
+      let err = dx - dy;
+      let x = startCol;
+      let y = startRow;
+
+      while (true) {
+        const index = y * numCols + x;
+        const cell = document.querySelector(`.cell input[name="${index}"]`);
+        if (cell) {
+          cell.checked = shouldCheck;
+        }
+
+        if (x === endCol && y === endRow) break;
+
+        const e2 = 2 * err;
+        if (e2 > -dy) {
+          err -= dy;
+          x += sx;
+        }
+        if (e2 < dx) {
+          err += dx;
+          y += sy;
+        }
+      }
+    }
+
+    // Handles mouseover while dragging to force cell checked
+    function handleMouseOver(event) {
+      if (isMouseDown) {
+        const cell = event.target.closest('.cell');
+        const check = cell.querySelector('input');
+        check.checked = true; // Always check (not toggle) when dragging
+        updateSaveLink();
+      }
+    }
+
+    // Create the grid of cells with checkboxes
+    for (let row = 0; row < numRows; row++) {
+      for (let col = 0; col < numCols; col++) {
+        const cell = document.createElement('div');
+        const check = document.createElement('input');
+        cell.className = 'cell';
+        check.type = 'checkbox';
+        check.name = cellNum;
+
+        cell.appendChild(check);
+        gridContainer.appendChild(cell);
+
+        cell.addEventListener('click', toggleCell);
+        cell.addEventListener('mouseover', handleMouseOver);
+
+        cellNum++;
+      }
+    }
+
+    // Set up event listeners when the document has loaded
+    document.addEventListener("DOMContentLoaded", function () {
+      saveLink = document.querySelector('a#save');
+
+      // Track shift key status
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Shift') isShiftPressed = true;
+      });
+      document.addEventListener('keyup', function (e) {
+        if (e.key === 'Shift') isShiftPressed = false;
+      });
+
+      // Track mouse down/up status for drag-to-check
+      document.addEventListener('mousedown', function (e) {
+        isMouseDown = true;
+      });
+      document.addEventListener('mouseup', function (e) {
+        isMouseDown = false;
+      });
+    });
+  </script>
+</body>
+</html>
+
