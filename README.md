@@ -15,16 +15,14 @@ A simple browser-based UI and Python program for generating IBM punch cards usin
      - If it's unchecked, the entire line will be unchecked.
 
 **Save Your Work**
-   - Click the **"Save"** link below the grid to download a CSV file containing your punched cell data. It will be named punchcard.csv by default.
+   - Click the **"Save"** link below the grid to download a CSV file containing your punched cell data. It will be named `punchcard.csv` by default.
 
 **Convert to SVG/PDF**
    - Move or copy `punchcard.csv` into the same directory as the Python converter script (`punchard.py`).
    - Run the following command in your terminal to install dependencies:
      ```bash
      pip install -r requirements.txt
-     ```
-   then run the following
-     ```bash
+     
      ./punchard.py punchard.csv
      ```
    - This will generate an SVG and PDF version of your punch card, named `output.csv` and `output.pdf`, respectively.
