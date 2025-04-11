@@ -19,7 +19,7 @@ A simple browser-based UI and Python program for generating IBM punch cards usin
 
 **Convert to SVG/PDF**
    - Move or copy `punchcard.csv` into the same directory as the Python converter script (`punchard.py`).
-   - Run the following command in your terminal to install dependencies:
+   - Run the following command in your terminal to install dependencies and run the conversion script:
      ```bash
      pip install -r requirements.txt
      
