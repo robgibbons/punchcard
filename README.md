@@ -25,7 +25,7 @@ A simple browser-based UI and Python program for generating IBM punch cards usin
      
      ./punchard.py punchard.csv
      ```
-   - This will generate an SVG and PDF version of your punch card, named `output.csv` and `output.pdf`, respectively.
+   - This will generate an SVG and PDF version of your punch card, named `output.svg` and `output.pdf`, respectively.
 
 
 **Laser Cutter**
